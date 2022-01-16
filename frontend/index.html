@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Multiplayer quiz game</title>
+</head>
+<body>
+
+
+    <div class="container" id="vapp">
+
+        <div class="pop-up" v-if="user.selectedRoomId && !joinedRoomData.id">
+            <div class="login">
+                <form v-on:submit="joinRoomSubmit">
+                    <input type="text" class="form-control" placeholder="Your name" v-model="user.name">
+                    <button type="submit" class="btn btn-primary mt10">Start</button>
+                    <a class="btn btn-cancel mt10" v-on:click="cancelJoin">Cancel</a>
+                </form>
+            </div>
+        </div>
+
+        <div class="box" v-if="!joinedRoomData.id">
+            <p class="centered p20 big-text">Join a room</p>
+            <div class="available-rooms p10">
+                <div class="room mt10" v-for="room in rooms" :key="room.id">
+                    <p>{{ room.name }}</p>
+                    <div style="display: flex;flex-direction: row; align-items: center;">
+                        <p class="mr20">{{ room.currentPlayers }}/{{ room.maxPlayers }}</p>
+                        <button class="btn btn-join" v-if="room.currentPlayers < room.maxPlayers" v-on:click="joinRoom(room.id)"><span>Join </span></button>
+                        <span class="btn full-room" v-if="room.currentPlayers == room.maxPlayers">Full&nbsp;</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <p class="centered p20 big-text">Create a room</p>
+            <div class="create-room">
+                <form v-on:submit="createRoom">
+                    <input type="text" placeholder="Your name" class="form-control mt10" v-model="newRoom.owner">
+                    <input type="text" placeholder="Room name" class="form-control mt10" v-model="newRoom.name">
+                    <input type="number" placeholder="Max players" class="form-control mt10" v-model="newRoom.maxPlayers">
+                    <button class="btn btn-primary mt10" type="submit"><span>Create </span></button>
+                </form>
+            </div>
+
+        </div>
+
+        <div class="box" v-if="joinedRoomData.id">
+
+            <h3 v-html="question.text" class="question-text"></h3>
+
+            <p>{{ timer }}</p>
+
+            <div class="variants">
+                <div class="variant mt10" v-for="variant in question.variants">
+                    <span v-html="variant"></span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"
+        integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H"
+        crossorigin="anonymous"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
