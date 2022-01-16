@@ -37,19 +37,19 @@ io.on("connection", (socket: any) =>
         let user =  users[userId];
 
         if(user) {
-            let room = rooms[user.currentRoomId];
-            let index = room.players.indexOf(userId);
-            room.players.splice(index, 1);
-            delete users[userId];
+            if(Object.keys(rooms).includes(user.currentRoomId)) {
+                let room = rooms[user.currentRoomId];
+                let index = room.players.indexOf(userId);
+                room.players.splice(index, 1);
+                delete users[userId];
 
-            refreshRoomUsers(user.currentRoomId);
+                refreshRoomUsers(user.currentRoomId);
 
-            if(room.players.length == 0) {
-                delete rooms[user.currentRoomId];
+                if (room.players.length == 0) {
+                    delete rooms[user.currentRoomId];
+                }
             }
-
         }
-        
     });
 
     socket.on('newRoom', (data: string) => {
