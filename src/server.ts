@@ -247,6 +247,10 @@ const startGame = (roomId: string) => {
         }, 16000 * i);
 
     });
+
+    setTimeout(() => {
+        removeRoomData(roomId);
+    }, 20000);
 }
 
 const prepareQuestions: any = async (roomId: string) => {
@@ -278,6 +282,18 @@ const prepareQuestions: any = async (roomId: string) => {
 
 }
 
+
+const removeRoomData = (roomId: string) => {
+    if(Object.keys(rooms).includes(roomId)) {
+        delete rooms[roomId];
+    }
+
+    if (Object.keys(questions).includes(roomId)) {
+        delete questions[roomId];
+    }
+
+    io.emit('refreshRooms', JSON.stringify(prepareRoomData()));
+}
 
 
 const shuffle = (array: string[]) => {
