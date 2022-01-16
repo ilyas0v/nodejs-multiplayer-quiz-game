@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function()
 {
-    const socket = io('http://localhost:3000');
+    const socket = io('https://quizello.herokuapp.com');
 
     window.vm = new Vue({
         el: '#vapp',
