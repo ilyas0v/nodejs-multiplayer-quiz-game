@@ -25,6 +25,7 @@
         <div class="box" v-if="!joinedRoomData.id">
             <p class="centered p20 big-text">Join a room</p>
             <div class="available-rooms p10">
+                <div class="room mt10" v-if="rooms.length == 0" style="box-shadow:none;border:none;">No rooms yet. Create a room below.</div>
                 <div class="room mt10" v-for="room in rooms" :key="room.id">
                     <p>{{ room.name }}</p>
                     <div style="display: flex;flex-direction: row; align-items: center;">
