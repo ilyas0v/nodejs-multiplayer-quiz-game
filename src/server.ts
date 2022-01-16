@@ -250,7 +250,7 @@ const startGame = (roomId: string) => {
 
     setTimeout(() => {
         removeRoomData(roomId);
-    }, 20000);
+    }, 200000);
 }
 
 const prepareQuestions: any = async (roomId: string) => {
