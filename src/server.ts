@@ -219,6 +219,11 @@ const checkUserCount = (roomId: string) => {
 const startGame = (roomId: string) => {
     let room = rooms[roomId];
 
+    if (!Object.keys(questions).includes(roomId)) {
+        prepareQuestions(roomId);
+        setTimeout(() => { startGame(roomId); }, 1000);
+    }
+
     questions[roomId].map((question: any, i: any) => {
         setTimeout(() => {
 
@@ -249,8 +254,11 @@ const startGame = (roomId: string) => {
     });
 
     setTimeout(() => {
-        removeRoomData(roomId);
-    }, 200000);
+        finishGame(roomId);
+        setTimeout(() => {
+            removeRoomData(roomId);
+        }, 1000);
+    }, 162000);
 }
 
 const prepareQuestions: any = async (roomId: string) => {
@@ -280,6 +288,23 @@ const prepareQuestions: any = async (roomId: string) => {
         });
     });
 
+}
+
+
+const finishGame = (roomId: string) => {
+    let players = getPlayersByRoomId(roomId);
+
+    let winner = players[0];
+
+    players.map((player: any) => {
+        if(player.score > winner.score) {
+            winner = player;
+        }
+    });
+
+    players.map((player: any) => {
+        io.to(player.id).emit('gameFinished', 'GAME FINISHED. WINNER: ' + (winner.score > 0 ? winner.name : 'NOBODY'));
+    });
 }
 
 

@@ -58,6 +58,11 @@ document.addEventListener('DOMContentLoaded', function()
             socket.on('correctAnswer', handleAnswerResponse);
             socket.on('wrongAnswer', handleAnswerResponse);
 
+            socket.on('gameFinished', function(data){
+                alert(data);
+                location.href = "/";
+            });
+
             function handleAnswerResponse(data) {
                 let dataJson = JSON.parse(data);
                 let selectedVariant = dataJson.selectedVariant;
