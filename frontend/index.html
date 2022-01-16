@@ -50,12 +50,23 @@
 
         <div class="box" v-if="joinedRoomData.id">
 
-            <h3 v-html="question.text" class="question-text"></h3>
+            <div class="preloader" v-if="!question.text">
+                <div class="loader"></div>
+            </div>
 
-            <p>{{ timer }}</p>
+            <div class="player-statistics">
+                <div class="player" v-for="player in joinedRoomData.players">
+                    <span>{{ player.name }}</span>
+                    <span class="score">{{ player.score }}</span>
+                </div>
+            </div>
 
+            <h3 v-html="(question.id + 1) + '). ' + question.text" class="question-text"></h3>
+
+            <div class="timer-line" v-bind:style="{ width: (((15 - timer) / 15 ) * 100) + '%' }"></div>  
+            <!-- <div>{{timer}}</div> -->
             <div class="variants">
-                <div class="variant mt10" v-for="variant in question.variants">
+                <div class="variant mt10" v-for="variant, variantId in question.variants" v-on:click="answer(question.id, variantId)">
                     <span v-html="variant"></span>
                 </div>
             </div>

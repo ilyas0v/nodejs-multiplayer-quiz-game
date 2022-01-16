@@ -40,9 +40,11 @@ document.addEventListener('DOMContentLoaded', function()
             socket.on('newQuestion', function (question) {
                 let questionJson = JSON.parse(question);
                 vm.$data.question = {
+                    id: questionJson.id,
                     text: questionJson.question,
                     variants: questionJson.variants
                 };
+                vm.$data.timer = 15;
             });
 
             socket.on('timer', function(seconds) {
@@ -67,6 +69,10 @@ document.addEventListener('DOMContentLoaded', function()
             joinRoomSubmit: function(event) {
                 event.preventDefault();
                 socket.emit('joinRoom', JSON.stringify(this.user));
+            },
+
+            answer: function(questionId, variantId) {
+                socket.emit('answerQuestion', JSON.stringify({ questionId: questionId, variantId: variantId, roomId: this.joinedRoomData.id}));
             }
         }
     })

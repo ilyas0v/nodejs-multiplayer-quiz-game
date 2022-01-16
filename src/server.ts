@@ -26,6 +26,7 @@ const users: any = {};
 const rooms: any = {};
 const userScores: any = {};
 const questions: any = {};
+const userAnsweredQuestions: any = {};
 
 /**
  * WEBSOCKET OPERATIONS
@@ -100,11 +101,36 @@ io.on("connection", (socket: any) =>
         
             refreshRoomUsers(selectedRoomId);
 
-            checkUserCount(selectedRoomId);
+            if (!Object.keys(questions).includes(selectedRoomId)) { // If no questions prepared yet, then prepare
+                checkUserCount(selectedRoomId);
+            }
+            
         }
 
         io.emit('refreshRooms', JSON.stringify(prepareRoomData()));
 
+    });
+
+    socket.on('answerQuestion', (data: string) => {
+        
+        let answerData = JSON.parse(data);
+        let roomId     = answerData.roomId;
+        let questionId = answerData.questionId;
+        let variantId  = answerData.variantId;
+        let userId     = socket.id;
+
+        if (!Object.keys(userAnsweredQuestions).includes(userId)) {
+            userAnsweredQuestions[userId] = [];
+        }
+
+        let question = questions[roomId][questionId];
+
+        if (question.correctAnswerIndex == variantId && !userAnsweredQuestions[userId].includes(questionId)) {
+            userScores[roomId][userId] += 1;
+            refreshRoomUsers(roomId);
+        }
+
+        userAnsweredQuestions[userId].push(questionId);
     });
 
     io.emit('refreshRooms', JSON.stringify(prepareRoomData()));
@@ -179,32 +205,34 @@ const checkUserCount = (roomId: string) => {
         });
 
         prepareQuestions(roomId);
-
         setTimeout(() => { startGame(roomId); }, 1000);
     }
 }
 
 const startGame = (roomId: string) => {
     let room = rooms[roomId];
-    let players = getPlayersByRoomId(roomId);
 
     questions[roomId].map((question: any, i: any) => {
-        console.log(question);
         setTimeout(() => {
 
+            let players = getPlayersByRoomId(roomId);
             let counter = 15;
 
             players.map((player: any) => {
                 io.to(player.id).emit('newQuestion', JSON.stringify(question));
-                io.to(player.id).emit('timer', counter--);
+                io.to(player.id).emit('timer', counter);
             });
+
+            counter -= 1;
 
             let questionTimer = setInterval(() => {
                 players.map((player: any) => {
-                    io.to(player.id).emit('timer', counter--);
+                    io.to(player.id).emit('timer', counter);
                 });
 
-                if (counter == 0) {
+                counter -= 1;
+
+                if (counter == -1) {
                     clearInterval(questionTimer);
                 }
             }, 1000);
@@ -225,7 +253,7 @@ const prepareQuestions: any = async (roomId: string) => {
 
         questions[roomId] = [];
 
-        bodyJson.results.map((result: any) => {
+        bodyJson.results.map((result: any, i: any) => {
             let correctAnswer = result.correct_answer;
             let incorrectAnswers = result.incorrect_answers;
             let variants = [correctAnswer].concat(incorrectAnswers);
@@ -233,6 +261,7 @@ const prepareQuestions: any = async (roomId: string) => {
             variants = shuffle(variants);
 
             questions[roomId].push({
+                id: i,
                 question: result.question,
                 variants: variants,
                 correctAnswerIndex: variants.indexOf(correctAnswer)
@@ -257,5 +286,4 @@ const shuffle = (array: string[]) => {
 
 const server = http.listen(3000, () => {
     console.log("listening on *:3000");
-    console.log(JSON.stringify(prepareRoomData()));
 });
