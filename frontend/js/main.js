@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function()
     window.vm = new Vue({
         el: '#vapp',
         data: {
+            loading: true,
             newRoom: {
                 owner: '',
                 name: '',
@@ -101,5 +102,9 @@ document.addEventListener('DOMContentLoaded', function()
                 socket.emit('answerQuestion', JSON.stringify({ questionId: questionId, variantId: variantId, roomId: this.joinedRoomData.id}));
             }
         }
-    })
+    });
+
+    setTimeout(() => {
+        document.getElementsByClassName('preloader')[0].style.display = 'none';
+    }, 1000);
 });
