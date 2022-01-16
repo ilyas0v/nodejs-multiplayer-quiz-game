@@ -93,6 +93,11 @@ document.addEventListener('DOMContentLoaded', function()
             },
 
             answer: function(questionId, variantId) {
+
+                if( this.selectedVariant ) {
+                    return false
+                }
+
                 socket.emit('answerQuestion', JSON.stringify({ questionId: questionId, variantId: variantId, roomId: this.joinedRoomData.id}));
             }
         }
