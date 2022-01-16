@@ -12,7 +12,6 @@ app.use(cors());
 app.use( express.json({ limit: '50mb' }) );
 app.use('/', express.static('frontend'));
 
-
 const http = new Server(app);
 const io = (socketIO as any)(http, { cors: { origin: '*' } });
 
