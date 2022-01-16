@@ -271,7 +271,7 @@ const prepareQuestions: any = async (roomId: string) => {
         return;
     }
 
-    let body = await request.get('https://opentdb.com/api.php?amount=10&type=multiple&token=992060a405ae581d283fa674474f3d4c566235a3cfc91275610aadcdf43f6558', {}, function (err, res, body) {
+    let body = await request.get('https://opentdb.com/api.php?amount=10&difficulty=easy&type=multiple&token=992060a405ae581d283fa674474f3d4c566235a3cfc91275610aadcdf43f6558', {}, function (err, res, body) {
         let bodyJson = JSON.parse(body);
 
         questions[roomId] = [];
