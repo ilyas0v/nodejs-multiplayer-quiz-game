@@ -14,7 +14,7 @@ app.use('/', express.static('frontend'));
 
 
 const http = new Server(app);
-const io = socketIO(http, { cors: { origin: '*' } });
+const io = (socketIO as any)(http, { cors: { origin: '*' } });
 
 
 app.get('/api', (req: any, res: any) => {
