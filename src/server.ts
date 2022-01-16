@@ -123,11 +123,19 @@ io.on("connection", (socket: any) =>
             userAnsweredQuestions[userId] = [];
         }
 
+        if (userAnsweredQuestions[userId].includes(questionId)) {
+            return false;
+        }
+
         let question = questions[roomId][questionId];
 
-        if (question.correctAnswerIndex == variantId && !userAnsweredQuestions[userId].includes(questionId)) {
+        if (question.correctAnswerIndex == variantId) {
             userScores[roomId][userId] += 1;
             refreshRoomUsers(roomId);
+
+            io.to(userId).emit('correctAnswer', JSON.stringify({ selectedVariant: variantId, correctVariant: question.correctAnswerIndex }));
+        } else {
+            io.to(userId).emit('wrongAnswer', JSON.stringify({ selectedVariant: variantId, correctVariant: question.correctAnswerIndex }));
         }
 
         userAnsweredQuestions[userId].push(questionId);

@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', function()
             usersInRoom: '',
             question: {},
             timer: 15,
+            selectedVariant: null,
+            correctVariant: null,
             rooms: []
         },
 
@@ -45,11 +47,25 @@ document.addEventListener('DOMContentLoaded', function()
                     variants: questionJson.variants
                 };
                 vm.$data.timer = 15;
+                vm.$data.correctVariant = null;
+                vm.$data.selectedVariant = null;
             });
 
             socket.on('timer', function(seconds) {
                 vm.$data.timer = seconds;
             });
+
+            socket.on('correctAnswer', handleAnswerResponse);
+            socket.on('wrongAnswer', handleAnswerResponse);
+
+            function handleAnswerResponse(data) {
+                let dataJson = JSON.parse(data);
+                let selectedVariant = dataJson.selectedVariant;
+                let correctVariant = dataJson.correctVariant;
+
+                vm.$data.correctVariant = correctVariant;
+                vm.$data.selectedVariant = selectedVariant;
+            }
         },
 
         methods: {

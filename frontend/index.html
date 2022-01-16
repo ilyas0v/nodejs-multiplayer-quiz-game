@@ -66,7 +66,7 @@
             <div class="timer-line" v-bind:style="{ width: (((15 - timer) / 15 ) * 100) + '%' }"></div>  
             <!-- <div>{{timer}}</div> -->
             <div class="variants">
-                <div class="variant mt10" v-for="variant, variantId in question.variants" v-on:click="answer(question.id, variantId)">
+                <div class="variant mt10" v-bind:class="{  correct : (variantId == correctVariant), wrong : (variantId == selectedVariant && variantId != correctVariant) }" v-for="variant, variantId in question.variants" v-on:click="answer(question.id, variantId)">
                     <span v-html="variant"></span>
                 </div>
             </div>

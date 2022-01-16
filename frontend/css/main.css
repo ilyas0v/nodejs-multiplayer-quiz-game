@@ -181,8 +181,20 @@
     transition: .3s background-color;
 }
 
+.variant.correct {
+    background-color: rgb(60, 168, 60);
+    color: white;
+    pointer-events: none;
+}
+
+.variant.wrong {
+    background-color: rgb(197, 70, 70);
+    color: white;
+    pointer-events: none;
+}
+
 .variants .variant:hover {
-    background-color: rgb(235, 235, 235);
+    /* background-color: rgb(235, 235, 235); */
 }
 
 .timer-line {
@@ -287,5 +299,14 @@
         -webkit-transform: rotate(360deg);
         -ms-transform: rotate(360deg);
         transform: rotate(360deg);
+    }
+}
+
+
+
+/* Responsive */
+@media only screen and (max-width: 900px) {
+    .box, .login {
+        width: 90%;
     }
 }
