@@ -58,6 +58,10 @@ io.on("connection", (socket: any) =>
         let roomData = JSON.parse(data);
         let userId = socket.id;
 
+        if (!roomData.name || !roomData.owner || !roomData.maxPlayers) {
+            return false;
+        }
+
         rooms[roomId] = {
             name: roomData.name,
             owner: roomData.owner,
@@ -85,7 +89,7 @@ io.on("connection", (socket: any) =>
 
         const selectedRoomId = joinData.selectedRoomId;
 
-        if (!selectedRoomId || !Object.keys(rooms).includes(selectedRoomId)) {
+        if (!selectedRoomId || !Object.keys(rooms).includes(selectedRoomId) || !joinData.name) {
             return false;
         }
         
