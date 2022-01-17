@@ -271,26 +271,33 @@ const prepareQuestions: any = async (roomId: string) => {
         return;
     }
 
-    let body = await request.get('https://opentdb.com/api.php?amount=10&difficulty=easy&type=multiple&token=992060a405ae581d283fa674474f3d4c566235a3cfc91275610aadcdf43f6558', {}, function (err, res, body) {
-        let bodyJson = JSON.parse(body);
+    let tokenBody = await request.get('https://opentdb.com/api_token.php?command=request', {}, async function(err, res, body) {
+        let tokenBodyJson = JSON.parse(body);
+        let token = tokenBodyJson.token;
+        let apiUrl = 'https://opentdb.com/api.php?amount=10&difficulty=easy&type=multiple&token=' + token;
 
-        questions[roomId] = [];
+        await request.get(apiUrl, {}, function (err, res, body) {
+            let bodyJson = JSON.parse(body);
 
-        bodyJson.results.map((result: any, i: any) => {
-            let correctAnswer = result.correct_answer;
-            let incorrectAnswers = result.incorrect_answers;
-            let variants = [correctAnswer].concat(incorrectAnswers);
+            questions[roomId] = [];
 
-            variants = shuffle(variants);
+            bodyJson.results.map((result: any, i: any) => {
+                let correctAnswer = result.correct_answer;
+                let incorrectAnswers = result.incorrect_answers;
+                let variants = [correctAnswer].concat(incorrectAnswers);
 
-            questions[roomId].push({
-                id: i,
-                question: result.question,
-                variants: variants,
-                correctAnswerIndex: variants.indexOf(correctAnswer)
+                variants = shuffle(variants);
+
+                questions[roomId].push({
+                    id: i,
+                    question: result.question,
+                    variants: variants,
+                    correctAnswerIndex: variants.indexOf(correctAnswer)
+                });
             });
         });
     });
+
 
 }
 
