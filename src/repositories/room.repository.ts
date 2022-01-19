@@ -21,7 +21,7 @@ class RoomRepository {
      * 
      * @returns {}
      */
-    public getAllRooms = () : {} => {
+    public getAllRooms = () : any => {
         return rooms;
     }
 
