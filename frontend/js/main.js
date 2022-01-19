@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', function()
 
             socket.on('joinedRoom', function(data){
                 var joinedRoomData = JSON.parse(data);
-                console.log(joinedRoomData);
                 vm.$data.joinedRoomData = joinedRoomData;
             });
 

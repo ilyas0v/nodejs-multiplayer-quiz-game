@@ -3,6 +3,7 @@ import { Service } from "typedi";
 import QuestionRepository from "../repositories/question.repository";
 import RoomRepository from "../repositories/room.repository";
 import { SocketIOService } from "./socketio.service";
+import { QUESTION_DURATION } from "../config";
 
 @Service()
 export class GameService {
@@ -48,7 +49,7 @@ export class GameService {
                     }
                 }, 1000);
 
-            }, 1600 * i);
+            }, QUESTION_DURATION * i);
 
         });
 
@@ -57,7 +58,7 @@ export class GameService {
             setTimeout(() => {
                 this.roomRepo.removeRoomData(roomId);
             }, 1000);
-        }, 16200);
+        }, (QUESTION_DURATION * 10) + 2000);
     }
 
     public finishGame = (roomId: string) => {

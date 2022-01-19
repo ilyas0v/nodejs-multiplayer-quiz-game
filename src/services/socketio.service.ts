@@ -1,5 +1,5 @@
 import * as socketIO from 'socket.io';
-import { App } from '../app';
+import App from '../app';
 
 export class SocketIOService {
     private static io: any = null;

@@ -3,7 +3,7 @@ import { Server } from 'http';
 import * as cors from 'cors';
 import { GameService } from "./services/game.service";
 
-export default class App {
+class App {
     public static app: express.Application = null;
     public static http: Server = null;
 
@@ -36,3 +36,5 @@ export default class App {
         this.app.use('/', express.static('frontend'));
     }
 }
+
+export default App;

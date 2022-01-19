@@ -1,3 +1,4 @@
+import "reflect-metadata"
 import { SocketIOService } from "./services/socketio.service";
 import App from './app';
 import RoomController from './controllers/room.controller';
@@ -12,19 +13,9 @@ const http = App.getHttp();
 
 const io: any = SocketIOService.getInstance();
 
-app.get('/api', (req: any, res: any) => {
-    // res.json(questions);
-});
-
-// const users: any = {}; 
-// const rooms: any = {};
-// const userScores: any = {};
-// const questions: any = {};
-// const userAnsweredQuestions: any = {};
-
-let roomRepo = Container.get(RoomRepository);
-const userController = Container.get(UserController);
-const rc = Container.get(RoomController);
+const roomRepository     = Container.get(RoomRepository);
+const userController     = Container.get(UserController);
+const roomController     = Container.get(RoomController);
 const questionController = Container.get(QuestionController);
 
 /**
@@ -33,22 +24,22 @@ const questionController = Container.get(QuestionController);
 io.on("connection", (socket: any) => 
 {
     socket.on('disconnect', () => {
-        userController.disconnect(io, socket);
+        userController.disconnect(socket);
     });
 
     socket.on('newRoom', (data: string) => {
-        rc.newRoom(io, socket, data);
+        roomController.newRoom(socket, data);
     });
 
     socket.on('joinRoom', (data: string) => {
-        rc.joinRoom(io, socket, data);    
+        roomController.joinRoom(socket, data);    
     });
 
     socket.on('answerQuestion', (data: string) => {
-        questionController.answer(io, socket, data);
+        questionController.answer(socket, data);
     });
 
-    io.emit('refreshRooms', JSON.stringify(roomRepo.prepareAllRoomsData()));
+    io.emit('refreshRooms', JSON.stringify(roomRepository.prepareAllRoomsData()));
 });
 
 

@@ -5,13 +5,22 @@ import { Service } from "typedi";
 import { GameService } from "../services/game.service";
 import { Room } from "../models/room.model";
 import { User } from "../models/user.model";
+import { SocketIOService } from "../services/socketio.service";
 
 @Service()
 class UserController {
-    constructor(private readonly roomRepository: RoomRepository, private readonly userRepository: UserRepository, private readonly questionRepository: QuestionRepository, private readonly gameService: GameService) {}
+    
+    private io: any;
 
+    constructor(private readonly roomRepository: RoomRepository, private readonly userRepository: UserRepository, private readonly questionRepository: QuestionRepository, private readonly gameService: GameService) {
+        this.io = SocketIOService.getInstance();
+    }
 
-    public disconnect = (io: any, socket: any) => {
+    /**
+     * 
+     * @param socket 
+     */
+    public disconnect = (socket: any) => {
         let userId = socket.id;
         let user: User = this.userRepository.findById(userId);
         let rooms = this.roomRepository.getAllRooms();

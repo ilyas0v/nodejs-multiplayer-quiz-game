@@ -6,12 +6,24 @@ import { User } from "../models/user.model";
 import QuestionRepository from "../repositories/question.repository";
 import { Service } from "typedi";
 import { GameService } from "../services/game.service";
+import { SocketIOService } from "../services/socketio.service";
 
 @Service()
 class RoomController {
-    constructor(private readonly roomRepository: RoomRepository, private readonly userRepository: UserRepository, private readonly questionRepository: QuestionRepository, private readonly gameService: GameService) {}
+    
+    private io: any;
 
-    public newRoom = (io: any, socket: any, newRoomData: string) => {
+    constructor(private readonly roomRepository: RoomRepository, private readonly userRepository: UserRepository, private readonly questionRepository: QuestionRepository, private readonly gameService: GameService) {
+        this.io = SocketIOService.getInstance();
+    }
+
+    /**
+     * 
+     * @param socket 
+     * @param newRoomData 
+     * @returns void
+     */
+    public newRoom = (socket: any, newRoomData: string) => {
 
         let roomId: string = uuid.v4();
         let roomDataJson: any = JSON.parse(newRoomData);
@@ -30,13 +42,11 @@ class RoomController {
 
         let room: Room = this.roomRepository.storeRoomById(roomId, createRoomData);
 
-        console.log(room);
-
         if(!room.hasUser(userId)) {
             room.playerIds.push(userId);
             this.userRepository.storeUserById(userId, { name: room.owner, currentRoomId: room.id });
             let players: User[] = this.roomRepository.getPlayersByRoomId(roomId);
-            io.to(userId).emit('joinedRoom', JSON.stringify({ id: roomId, ...room, players: players}));
+            this.io.to(userId).emit('joinedRoom', JSON.stringify({ id: roomId, ...room, players: players}));
             
             let shouldStart = this.roomRepository.checkUserCountForStart(roomId);
 
@@ -46,15 +56,16 @@ class RoomController {
             }
         }
 
-        io.emit('refreshRooms', JSON.stringify(this.roomRepository.prepareAllRoomsData()));
+        this.io.emit('refreshRooms', JSON.stringify(this.roomRepository.prepareAllRoomsData()));
     }    
 
     /**
      * 
+     * @param socket 
      * @param data 
      * @returns void
      */
-    public joinRoom = (io: any, socket: any, data: string) => {
+    public joinRoom = (socket: any, data: string) => {
         let joinData = JSON.parse(data);
 
         let selectedRoomId = joinData.selectedRoomId;
@@ -70,7 +81,7 @@ class RoomController {
             room.playerIds.push(userId);
             this.userRepository.storeUserById(userId, { name: joinData.name, currentRoomId: selectedRoomId })
             let players = this.roomRepository.getPlayersByRoomId(selectedRoomId);
-            io.to(userId).emit('joinedRoom', JSON.stringify({ id: selectedRoomId, ...room, players: players }));
+            this.io.to(userId).emit('joinedRoom', JSON.stringify({ id: selectedRoomId, ...room, players: players }));
 
 
             this.roomRepository.refreshRoomUsers(selectedRoomId);
@@ -87,7 +98,7 @@ class RoomController {
 
         }
 
-        io.emit('refreshRooms', JSON.stringify(this.roomRepository.prepareAllRoomsData());
+        this.io.emit('refreshRooms', JSON.stringify(this.roomRepository.prepareAllRoomsData()));
 
     }
 

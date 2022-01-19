@@ -10,24 +10,38 @@ const rooms: any = {};
 
 @Service()
 class RoomRepository {
+
     private io: any = null;
 
     constructor(private userRepository: UserRepository, private scoreRepository: ScoreRepository, private questionRepository: QuestionRepository) {
         this.io = SocketIOService.getInstance();
     }
 
-    public getAllRooms = () => {
+    /**
+     * 
+     * @returns {}
+     */
+    public getAllRooms = () : {} => {
         return rooms;
     }
 
-    public a = 1;
-
-    public storeRoomById = (roomId: string, roomData: Room) => {
+    /**
+     * 
+     * @param roomId 
+     * @param roomData 
+     * @returns Room
+     */
+    public storeRoomById = (roomId: string, roomData: Room) : Room => {
         rooms[roomId] = roomData;
         return rooms[roomId];
     }
 
-    public getRoomById = (roomId: string) => {
+    /**
+     * 
+     * @param roomId 
+     * @returns Room
+     */
+    public getRoomById = (roomId: string) : Room => {
         if(this.checkRoomExists(roomId)) {
             return rooms[roomId];
         }
@@ -35,11 +49,21 @@ class RoomRepository {
         return null;
     }
 
-    public checkRoomExists = (roomId: string) => {
+    /**
+     * 
+     * @param roomId 
+     * @returns boolean
+     */
+    public checkRoomExists = (roomId: string) : boolean => {
         return Object.keys(rooms).includes(roomId);
     }
 
-    public getPlayersByRoomId = (roomId: string) => {
+    /**
+     * 
+     * @param roomId 
+     * @returns User[]
+     */
+    public getPlayersByRoomId = (roomId: string) : User[] => {
         if (!this.checkRoomExists(roomId)) {
             return [];
         }
@@ -59,6 +83,11 @@ class RoomRepository {
         return players;
     }
 
+    /**
+     * 
+     * @param roomId
+     * @returns boolean
+     */
     public checkUserCountForStart = (roomId: string) : boolean => {
         let room = this.getRoomById(roomId);
 
@@ -75,7 +104,12 @@ class RoomRepository {
         return false;
     }
 
-    public prepareAllRoomsData = () => {
+    /**
+     * 
+     * @returns Room[]
+     */
+    public prepareAllRoomsData = (test: string = '') => {
+        
         let result: Room[] = [];
 
         Object.keys(rooms).map((roomId: string) => {
@@ -89,12 +123,22 @@ class RoomRepository {
         return result;
     }
 
-    public hasQuestions = (roomId: string) => {
+    /**
+     * 
+     * @param roomId 
+     * @returns boolean
+     */
+    public hasQuestions = (roomId: string) : boolean => {
         let questions = this.questionRepository.getAllQuestions();
         return Object.keys(questions).includes(roomId);
     }
 
-    public removeRoomData = (roomId: string) => {
+    /**
+     * 
+     * @param roomId 
+     * returns void
+     */
+    public removeRoomData = (roomId: string) : void => {
         if (Object.keys(rooms).includes(roomId)) {
             delete rooms[roomId];
         }
@@ -104,7 +148,12 @@ class RoomRepository {
         this.io.emit('refreshRooms', JSON.stringify(this.prepareAllRoomsData()));
     }
 
-    public refreshRoomUsers = (roomId: string) => {
+    /**
+     * 
+     * @param roomId 
+     * returns void
+     */
+    public refreshRoomUsers = (roomId: string) :  void => {
         let players = this.getPlayersByRoomId(roomId);
         players.map((player: any) => {
             this.io.to(player.id).emit('refreshPlayers', JSON.stringify(players));

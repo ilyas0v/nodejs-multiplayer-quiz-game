@@ -3,6 +3,7 @@ import * as request from 'request';
 import { shuffleArray } from "../helpers";
 import { Question } from "../models/question.model";
 import { Service } from "typedi";
+import { Room } from "../models/room.model";
 
 const questions: any = {};
 const userAnsweredQuestions: any = {};
@@ -16,9 +17,14 @@ class QuestionRepository {
         return questions;
     } 
 
-    public prepareQuestions = async (roomId: string) => {
+    /**
+     * 
+     * @param roomId 
+     * @returns Promise<Question[]>
+     */
+    public prepareQuestions = async (roomId: string) :  Promise<Question[]> => {
         if (this.checkIfARoomHasQuestions(roomId)) {
-            return;
+            return this.getQuestionsByRoomId(roomId);
         }
 
         let tokenBody = await request.get('https://opentdb.com/api_token.php?command=request', {}, async function (err, res, body) {
@@ -53,7 +59,12 @@ class QuestionRepository {
         });
     }
 
-    public getQuestionsByRoomId = (roomId: string) => {
+    /**
+     * 
+     * @param roomId 
+     * @returns Room[]
+     */
+    public getQuestionsByRoomId = (roomId: string) : Question[] => {
         if(Object.keys(questions).includes(roomId)) {
             return [];
         }
@@ -61,12 +72,22 @@ class QuestionRepository {
         return questions[roomId];
     }
 
-    public checkIfARoomHasQuestions = (roomId: string) => {
+    /**
+     * 
+     * @param roomId 
+     * @returns boolean
+     */
+    public checkIfARoomHasQuestions = (roomId: string) : boolean => {
         let questions = this.getAllQuestions();
         return Object.keys(questions).includes(roomId);
     }
 
-    public getUserAnsweredQuestions = (userId: string) => {
+    /**
+     * 
+     * @param userId 
+     * @returns string[]
+     */
+    public getUserAnsweredQuestions = (userId: string) : string[] => {
         if (!Object.keys(userAnsweredQuestions).includes(userId)) {
             userAnsweredQuestions[userId] = [];
         }
@@ -74,7 +95,13 @@ class QuestionRepository {
         return userAnsweredQuestions[userId];
     }
 
-    public getQuestionByRoomAndQuestionId = (roomId: string, questionId: number) => {
+    /**
+     * 
+     * @param roomId 
+     * @param questionId 
+     * @returns Question[]
+     */
+    public getQuestionByRoomAndQuestionId = (roomId: string, questionId: number) :  Question => {
         let questionsOfRoom = questions[roomId];
 
         if (!questionsOfRoom || !questionsOfRoom[questionId]) {
@@ -84,6 +111,12 @@ class QuestionRepository {
         return questionsOfRoom[questionId];
     }
 
+    /**
+     * 
+     * @param userId 
+     * @param questionId 
+     * @returns void
+     */
     public markQuestionAsAnsweredByUser = (userId: string, questionId: number) => {
         userAnsweredQuestions[userId].push(questionId);
     }
