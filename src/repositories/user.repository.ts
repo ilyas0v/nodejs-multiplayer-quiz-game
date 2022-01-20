@@ -1,5 +1,6 @@
 import { User } from "../models/user.model";
 import { Service } from "typedi";
+import { randomInteger } from "../helpers";
 
 const users: any = {};
 
@@ -34,6 +35,9 @@ export class UserRepository {
      * @returns User
      */
     public storeUserById = (userId: string, userData: User) :  User => {
+        let xRand = randomInteger(0, 4);
+        let yRand = randomInteger(0, 4);
+        userData['picturePosition'] = `-${xRand * 85 }px -${ yRand * 85 }px`;
         users[userId] = userData;
         return users[userId];
     }

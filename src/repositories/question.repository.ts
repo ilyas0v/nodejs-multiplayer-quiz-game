@@ -32,8 +32,6 @@ class QuestionRepository {
             let token = tokenBodyJson.token;
             let apiUrl = 'https://opentdb.com/api.php?amount=10&difficulty=easy&type=multiple&token=' + token + (room.category ? `&category=${room.category}` : '') + (room.difficulty ? `&difficulty=${room.difficulty}` : '');
 
-            console.log(apiUrl);
-
             await request.get(apiUrl, {}, function (err, res, body) {
                 let bodyJson = JSON.parse(body);
 

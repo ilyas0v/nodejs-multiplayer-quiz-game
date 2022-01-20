@@ -220,12 +220,6 @@
     justify-content: center;
 }
 
-.player-statistics .player .score {
-    color: green;
-    font-size: 25px;
-    font-weight: bold;
-}
-
 .preloader {
     position: absolute;
     top: 0;
@@ -303,6 +297,34 @@
     }
 }
 
+.player {
+    position: relative;
+}
+
+.player .score {
+    position: absolute;
+    right: -5px;
+    top: -5px;
+    font-weight: bold;
+    width: 30px;
+    height: 30px;
+    background: green;
+    color: white;
+    font-size: 16px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 50%;
+}
+
+.player .user-picture {
+    width: 75px;
+    height: 75px;
+    background: url(../images/sprites.jpg);
+    background-position: 0 0;
+    border-radius: 50%;
+    border: 3px solid blue;
+    position: relative;
+}
 
 
 /* Responsive */

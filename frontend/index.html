@@ -100,8 +100,10 @@
 
             <div class="player-statistics">
                 <div class="player" v-for="player in joinedRoomData.players">
+                    <div class="user-picture" v-bind:style="{ backgroundPosition: player.picturePosition }">
+                        <span class="score">{{ player.score }}</span>
+                    </div>
                     <span>{{ player.name }}</span>
-                    <span class="score">{{ player.score }}</span>
                 </div>
             </div>
 
