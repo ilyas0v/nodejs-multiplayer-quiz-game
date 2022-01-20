@@ -6,10 +6,14 @@ document.addEventListener('DOMContentLoaded', function()
         el: '#vapp',
         data: {
             loading: true,
+            categories: [],
+            difficulties: ['easy', 'medium', 'hard'],
             newRoom: {
                 owner: '',
                 name: '',
-                maxPlayers: ''
+                maxPlayers: '',
+                selectedCategory: '',
+                difficulty: ''
             },
             user: {
                 name: '',
@@ -25,6 +29,14 @@ document.addEventListener('DOMContentLoaded', function()
         },
 
         created: function() {
+
+            fetch('https://opentdb.com/api_category.php')
+                .then(function (res) {
+                    return res.json(); 
+                }).then(function (res) {
+                    vm.$data.categories = res.trivia_categories; 
+                });
+            
             socket.on('refreshRooms', function(roomData){
                 vm.$data.rooms = JSON.parse(roomData);
             });

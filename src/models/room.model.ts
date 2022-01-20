@@ -5,6 +5,8 @@ export class Room {
                 public name: string, 
                 public owner: string, 
                 public maxPlayers: number, 
+                public category: number = null,
+                public difficulty: string = null,
                 public currentPlayers: number = 1,
                 public playerIds: string[] = []) {}
 

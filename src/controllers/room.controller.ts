@@ -38,6 +38,8 @@ class RoomController {
             roomDataJson.name,
             roomDataJson.owner,
             roomDataJson.maxPlayers,
+            roomDataJson.selectedCategory,
+            roomDataJson.difficulty
         );
 
         let room: Room = this.roomRepository.storeRoomById(roomId, createRoomData);
@@ -51,7 +53,7 @@ class RoomController {
             let shouldStart = this.roomRepository.checkUserCountForStart(roomId);
 
             if(shouldStart) {
-                this.questionRepository.prepareQuestions(roomId);
+                this.questionRepository.prepareQuestions(room);
                 setTimeout(() => { this.startGame(roomId); }, 3000);
             }
         }
@@ -87,7 +89,7 @@ class RoomController {
             this.roomRepository.refreshRoomUsers(selectedRoomId);
 
             if (!this.questionRepository.checkIfARoomHasQuestions(selectedRoomId)) { // If no questions prepared yet, then prepare
-                this.questionRepository.prepareQuestions(selectedRoomId);
+                this.questionRepository.prepareQuestions(room);
             }
 
             let shouldStart = this.roomRepository.checkUserCountForStart(selectedRoomId);

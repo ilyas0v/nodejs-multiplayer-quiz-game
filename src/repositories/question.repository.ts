@@ -22,20 +22,22 @@ class QuestionRepository {
      * @param roomId 
      * @returns Promise<Question[]>
      */
-    public prepareQuestions = async (roomId: string) :  Promise<Question[]> => {
-        if (this.checkIfARoomHasQuestions(roomId)) {
-            return this.getQuestionsByRoomId(roomId);
+    public prepareQuestions = async (room: Room) :  Promise<Question[]> => {
+        if (this.checkIfARoomHasQuestions(room.id)) {
+            return this.getQuestionsByRoomId(room.id);
         }
 
         let tokenBody = await request.get('https://opentdb.com/api_token.php?command=request', {}, async function (err, res, body) {
             let tokenBodyJson = JSON.parse(body);
             let token = tokenBodyJson.token;
-            let apiUrl = 'https://opentdb.com/api.php?amount=10&difficulty=easy&type=multiple&token=' + token;
+            let apiUrl = 'https://opentdb.com/api.php?amount=10&difficulty=easy&type=multiple&token=' + token + (room.category ? `&category=${room.category}` : '') + (room.difficulty ? `&difficulty=${room.difficulty}` : '');
+
+            console.log(apiUrl);
 
             await request.get(apiUrl, {}, function (err, res, body) {
                 let bodyJson = JSON.parse(body);
 
-                questions[roomId] = [];
+                questions[room.id] = [];
 
                 bodyJson.results.map((result: any, i: any) => {
                     let correctAnswer = result.correct_answer;
@@ -51,10 +53,10 @@ class QuestionRepository {
                         correctAnswerIndex: variants.indexOf(correctAnswer)
                     }
 
-                    questions[roomId].push(questionStoreData);
+                    questions[room.id].push(questionStoreData);
                 });
 
-                return questions[roomId];
+                return questions[room.id];
             });
         });
     }

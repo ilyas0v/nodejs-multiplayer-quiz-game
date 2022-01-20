@@ -77,6 +77,14 @@
                 <form v-on:submit="createRoom">
                     <input type="text" placeholder="Your name" class="form-control mt10" v-model="newRoom.owner">
                     <input type="text" placeholder="Room name" class="form-control mt10" v-model="newRoom.name">
+                    <select v-model="newRoom.selectedCategory" class="form-control mt10">
+                        <option value="">All categories</option>
+                        <option v-for="category in categories" v-bind:value="category.id">{{ category.name }}</option>
+                    </select>
+                    <select v-model="newRoom.difficulty" class="form-control mt10">
+                        <option value="">All difficulties</option>
+                        <option v-for="difficulty in difficulties" v-bind:value="difficulty">{{ difficulty }}</option>
+                    </select>
                     <input type="number" placeholder="Max players" class="form-control mt10" v-model="newRoom.maxPlayers">
                     <button class="btn btn-primary mt10" type="submit"><span>Create </span></button>
                 </form>

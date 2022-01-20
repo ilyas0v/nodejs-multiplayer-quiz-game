@@ -19,7 +19,7 @@ export class GameService {
         let questions = this.questionRepo.getAllQuestions();
 
         if(!this.roomRepo.hasQuestions(roomId)) {
-            this.questionRepo.prepareQuestions(roomId);
+            this.questionRepo.prepareQuestions(room);
             setTimeout(() => { this.startGame(roomId) }, 3000);
         }
 
