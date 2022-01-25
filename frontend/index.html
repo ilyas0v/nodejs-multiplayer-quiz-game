@@ -95,7 +95,17 @@
         <div class="box" v-if="joinedRoomData.id">
 
             <div class="preloader" v-if="!question.text">
+                <div class="player-statistics">
+                    <div class="player" v-for="player in joinedRoomData.players">
+                        <div class="user-picture" v-bind:style="{ backgroundPosition: player.picturePosition }"></div>
+                        <span>{{ player.name }}</span>
+                    </div>
+                </div>
                 <div class="loader"></div>
+                <p v-if="joinedRoomData.players.length < joinedRoomData.maxPlayers">Waiting for other players to join &nbsp;<b style="font-size: 20px;">{{ joinedRoomData.players.length }}/{{ joinedRoomData.maxPlayers }}</b></p>
+                <p v-if="joinedRoomData.players.length == joinedRoomData.maxPlayers">Game is starting...</p>
+                <br>
+                <p class="hint"><b>Hint:</b> for playing alone, create a game with <b>"Max players : 1"</b></p>
             </div>
 
             <div class="player-statistics">
