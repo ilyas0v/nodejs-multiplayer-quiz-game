@@ -72,11 +72,12 @@ class RoomController {
 
         let selectedRoomId = joinData.selectedRoomId;
 
-        if (!selectedRoomId || !this.roomRepository.getRoomById(selectedRoomId) || !joinData.name) {
+        const room = this.roomRepository.getRoomById(selectedRoomId);
+
+        if (!selectedRoomId || !room || !joinData.name) {
             return false;
         }
 
-        const room = this.roomRepository.getRoomById(selectedRoomId);
         const userId = socket.id;
 
         if (!room.hasUser(userId)) {
@@ -93,8 +94,9 @@ class RoomController {
             }
 
             let shouldStart = this.roomRepository.checkUserCountForStart(selectedRoomId);
+            let alreadyStarted = room.gameAlreadyStarted;
 
-            if (shouldStart) {
+            if (shouldStart && !alreadyStarted) {
                 setTimeout(() => { this.startGame(selectedRoomId); }, 3000);
             }
 

@@ -23,6 +23,7 @@ export class GameService {
             setTimeout(() => { this.startGame(roomId) }, 3000);
         }
 
+        this.roomRepo.setGameAsStarted(roomId);
 
         questions[roomId].map((question: any, i: any) => {
             setTimeout(() => {
@@ -58,7 +59,7 @@ export class GameService {
             setTimeout(() => {
                 this.roomRepo.removeRoomData(roomId);
             }, 1000);
-        }, (QUESTION_DURATION * 10) + 2000);
+        }, (QUESTION_DURATION * 10) + 200);
     }
 
     public finishGame = (roomId: string) => {

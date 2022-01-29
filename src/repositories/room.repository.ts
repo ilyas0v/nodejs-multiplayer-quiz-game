@@ -159,6 +159,15 @@ class RoomRepository {
             this.io.to(player.id).emit('refreshPlayers', JSON.stringify(players));
         });
     }
+
+
+    public setGameAsStarted = (roomId: string) : void => {
+        let room = this.getRoomById(roomId);
+
+        if(room) {
+            rooms[roomId].gameAlreadyStarted = true;
+        }
+    }
 }
 
 export default RoomRepository;

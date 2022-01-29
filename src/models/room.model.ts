@@ -1,6 +1,9 @@
 import { User } from "./user.model";
 
 export class Room {
+
+    public gameAlreadyStarted: boolean = false;
+    
     constructor(public id: string, 
                 public name: string, 
                 public owner: string, 
