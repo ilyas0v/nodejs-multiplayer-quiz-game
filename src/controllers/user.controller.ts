@@ -41,6 +41,27 @@ class UserController {
             }
         }
     }
+
+    /**
+     * 
+     * @param socket 
+     * @param data 
+     * @returns void
+     */
+    public updateAvatar = (socket: any, data: string) => {
+        let updateData = JSON.parse(data);
+
+        let x    = updateData.x;
+        let y    = updateData.y;
+        let user = this.userRepository.findById(socket.id);
+
+        if(!user) {
+            return false;
+        }
+
+        this.userRepository.updateAvatar(socket.id, x, y);
+        this.roomRepository.refreshRoomUsers(user.currentRoomId);
+    }
 }
 
 

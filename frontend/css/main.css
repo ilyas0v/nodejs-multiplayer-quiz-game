@@ -10,6 +10,11 @@
     user-select: none;
 }
 
+hr {
+    border: none;
+    border-top: 1px solid #ededed;
+}
+
 .container {
     position: absolute;
     width: 100%;
@@ -52,6 +57,10 @@
 
 .mt10 {
     margin-top: 10px;
+}
+
+.mt20 {
+    margin-top: 20px;
 }
 
 .mr20 {
@@ -111,6 +120,7 @@
     border:none;
     border-radius: 5px;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .btn-primary {
@@ -164,7 +174,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: rgba(0, 0, 0, 0.8);
     z-index: 10000;
 }
 
@@ -187,6 +197,7 @@
     border-radius: 10px;
     cursor: pointer;
     transition: .3s background-color;
+    box-shadow: 2px 1px 4px #dbdbdb;
 }
 
 .variant.correct {
@@ -324,7 +335,7 @@
     border-radius: 50%;
 }
 
-.player .user-picture {
+.user-picture {
     width: 75px;
     height: 75px;
     background: url(../images/sprites.jpg);
@@ -340,9 +351,52 @@
     text-align: center;
 }
 
+.avatars {
+    width: 425px;
+    height: 425px;
+    display: flex;
+    flex-direction: column;
+        align-items: center;
+}
+
+.avatars .row {
+    display: flex;
+    flex-direction: row;
+}
+
+.avatar {
+    cursor: pointer;
+}
+
+.avatar:hover {
+    filter: opacity(0.5);
+}
+
+.change-avatar {
+    filter: invert();
+    width: 20px;
+    position: absolute;
+    bottom: -6px;
+    right: -6px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 1px 1px 10px #ddd;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.change-avatar:hover {
+    background: #507dcf;
+}
+
 /* Responsive */
 @media only screen and (max-width: 900px) {
     .box, .login {
         width: 90%;
+    }
+
+    .avatars .user-picture {
+        width: 70px;
+        height: 70px;
     }
 }

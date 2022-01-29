@@ -41,4 +41,19 @@ export class UserRepository {
         users[userId] = userData;
         return users[userId];
     }
+
+    /**
+     * 
+     * @param userId 
+     * @param x 
+     * @param y 
+     * @returns void
+     */
+    public updateAvatar = (userId: string, x: number, y: number): void => {
+        let user = this.findById(userId);
+
+        if(user) {
+            users[userId].picturePosition = `-${ x * 85 }px -${ y * 85 }px`;
+        } 
+    }
 }

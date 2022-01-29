@@ -48,7 +48,7 @@ class RoomController {
             room.playerIds.push(userId);
             this.userRepository.storeUserById(userId, { name: room.owner, currentRoomId: room.id });
             let players: User[] = this.roomRepository.getPlayersByRoomId(roomId);
-            this.io.to(userId).emit('joinedRoom', JSON.stringify({ id: roomId, ...room, players: players}));
+            this.io.to(userId).emit('joinedRoom', JSON.stringify({ id: roomId, ...room, players: players, currentUserId: userId }));
             
             let shouldStart = this.roomRepository.checkUserCountForStart(roomId);
 
@@ -83,7 +83,7 @@ class RoomController {
             room.playerIds.push(userId);
             this.userRepository.storeUserById(userId, { name: joinData.name, currentRoomId: selectedRoomId })
             let players = this.roomRepository.getPlayersByRoomId(selectedRoomId);
-            this.io.to(userId).emit('joinedRoom', JSON.stringify({ id: selectedRoomId, ...room, players: players }));
+            this.io.to(userId).emit('joinedRoom', JSON.stringify({ id: selectedRoomId, ...room, players: players, currentUserId: userId }));
 
 
             this.roomRepository.refreshRoomUsers(selectedRoomId);

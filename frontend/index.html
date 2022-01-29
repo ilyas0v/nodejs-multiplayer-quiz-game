@@ -57,6 +57,15 @@
             </div>
         </div>
 
+        <div class="pop-up" v-if="avatarModal" style="z-index: 10000000;">
+            <div class="avatars">
+                <div class="row" v-for="i in [0, 1, 2, 3, 4]">
+                    <div class="avatar user-picture" v-for="j in [0, 1, 2, 3, 4]" v-bind:style="{ backgroundPosition: `-${ i * 85 }px -${ j * 85 }px` }" v-on:click="setAvatar(i, j)"></div>
+                </div>
+                <button class="btn btn-cancel mt10" v-on:click="closeAvatarModal()">Close</button>
+            </div>
+        </div>
+
         <div class="box" v-if="!joinedRoomData.id">
             <p class="centered p20 big-text">Join a room</p>
             <div class="available-rooms p10">
@@ -96,14 +105,17 @@
 
             <div class="preloader" v-if="!question.text">
                 <div class="player-statistics">
-                    <div class="player" v-for="player in joinedRoomData.players">
-                        <div class="user-picture" v-bind:style="{ backgroundPosition: player.picturePosition }"></div>
+                    <div class="player" v-for="player in joinedRoomData.players" style="margin: 5px;">
+                        <div class="user-picture" v-bind:style="{ backgroundPosition: player.picturePosition }">
+                            <img class="change-avatar" v-if="user.id == player.id" v-on:click="openAvatarModal()" src="./images/change-avatar.png">
+                        </div>
                         <span>{{ player.name }}</span>
                     </div>
                 </div>
                 <div class="loader"></div>
                 <p v-if="joinedRoomData.players.length < joinedRoomData.maxPlayers">Waiting for other players to join &nbsp;<b style="font-size: 20px;">{{ joinedRoomData.players.length }}/{{ joinedRoomData.maxPlayers }}</b></p>
                 <p v-if="joinedRoomData.players.length == joinedRoomData.maxPlayers">Game is starting...</p>
+                <a href="" class="btn btn-cancel mt10">Cancel</a>
                 <br>
                 <p class="hint"><b>Hint:</b> for playing alone, create a game with <b>"Max players : 1"</b></p>
             </div>
@@ -112,6 +124,7 @@
                 <div class="player" v-for="player in joinedRoomData.players">
                     <div class="user-picture" v-bind:style="{ backgroundPosition: player.picturePosition }">
                         <span class="score">{{ player.score }}</span>
+                        <img class="change-avatar" v-if="user.id == player.id" v-on:click="openAvatarModal()" src="./images/change-avatar.png">
                     </div>
                     <span>{{ player.name }}</span>
                 </div>
@@ -123,9 +136,14 @@
             <!-- <div>{{timer}}</div> -->
             <div class="variants">
                 <div class="variant mt10" v-bind:class="{  correct : (variantId == correctVariant), wrong : (variantId == selectedVariant && variantId != correctVariant) }" v-for="variant, variantId in question.variants" v-on:click="answer(question.id, variantId)">
+                    <span v-html="['A', 'B', 'C', 'D'][variantId] + ') ' "></span>
                     <span v-html="variant"></span>
                 </div>
             </div>
+            
+            <hr class="mt20">
+            
+            <p class="mt10 hint" style="text-align: left;">Total <b>10</b> questions</p>
 
         </div>
     </div>

@@ -39,6 +39,10 @@ io.on("connection", (socket: any) =>
         questionController.answer(socket, data);
     });
 
+    socket.on('updateAvatar', (data: string) => {
+        userController.updateAvatar(socket, data);
+    });
+
     io.emit('refreshRooms', JSON.stringify(roomRepository.prepareAllRoomsData()));
 });
 

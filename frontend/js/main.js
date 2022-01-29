@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function()
 {
-    const socket = io('/');
+    const socket =  io('/');
 
     window.vm = new Vue({
         el: '#vapp',
@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function()
                 difficulty: ''
             },
             user: {
+                id: '',
                 name: '',
                 selectedRoomId: ''
             },
@@ -25,7 +26,8 @@ document.addEventListener('DOMContentLoaded', function()
             timer: 15,
             selectedVariant: null,
             correctVariant: null,
-            rooms: []
+            rooms: [],
+            avatarModal: false
         },
 
         created: function() {
@@ -44,6 +46,7 @@ document.addEventListener('DOMContentLoaded', function()
             socket.on('joinedRoom', function(data){
                 var joinedRoomData = JSON.parse(data);
                 vm.$data.joinedRoomData = joinedRoomData;
+                vm.$data.user.id = joinedRoomData.currentUserId;
             });
 
             socket.on('refreshPlayers', function(players){
@@ -86,6 +89,24 @@ document.addEventListener('DOMContentLoaded', function()
         },
 
         methods: {
+            
+            isMobile: function() {
+                return window.innerWidth <= 900;
+            },
+
+            openAvatarModal: function() {
+                this.avatarModal = true;
+            },
+
+            closeAvatarModal: function() {
+                this.avatarModal = false;
+            },
+
+            setAvatar: function(x, y) {
+                socket.emit('updateAvatar', JSON.stringify({ x: x, y: y }));
+                this.closeAvatarModal();
+            },
+
             createRoom: function(event) {
                 event.preventDefault();
                 socket.emit('newRoom', JSON.stringify(this.newRoom));
