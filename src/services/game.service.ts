@@ -72,8 +72,25 @@ export class GameService {
             }
         });
 
+        // let rankedPlayers: any[] = [];
+        let lastRank = 0;
+
+        players.sort((a: User, b: User) => {
+            return b.score - a.score;
+        });
+
+        for(let i = 0; i < players.length; i++) {
+            if (i == 0 || players[i].score != players[i - 1].score) {
+                // rankedPlayers.push([]);
+                lastRank++;
+            }
+
+            // rankedPlayers[lastRank - 1].push(players[i]);
+            players[i].rank = lastRank;
+        }
+
         players.map((player: User) => {
-            this.io.to(player.id).emit('gameFinished', 'GAME FINISHED. WINNER: ' + (winner.score > 0 ? winner.name : 'NOBODY'));
+            this.io.to(player.id).emit('gameFinished', JSON.stringify({rankedPlayers: players}));
         });
     }
 }

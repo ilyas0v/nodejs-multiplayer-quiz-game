@@ -27,7 +27,8 @@ document.addEventListener('DOMContentLoaded', function()
             selectedVariant: null,
             correctVariant: null,
             rooms: [],
-            avatarModal: false
+            avatarModal: false,
+            leaderBoard: []
         },
 
         created: function() {
@@ -74,8 +75,7 @@ document.addEventListener('DOMContentLoaded', function()
             socket.on('wrongAnswer', handleAnswerResponse);
 
             socket.on('gameFinished', function(data){
-                alert(data);
-                location.href = "/";
+                vm.$data.leaderBoard = (JSON.parse(data)).rankedPlayers;
             });
 
             function handleAnswerResponse(data) {

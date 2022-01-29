@@ -389,6 +389,68 @@ hr {
     background: #507dcf;
 }
 
+.leaderboard {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100000;
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    transition: display 1s;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+.leaderboard .leaderboard-player {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 12px;
+    border: 1px solid #DDD;
+    border-radius: 10px;
+    box-sizing: border-box;
+    width: 100%;
+    box-shadow: 1px 1px 5px #DDD;
+}
+
+.leaderboard-player .player-name {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 12px;
+    font-weight: bold;
+    width: 200px;
+}
+
+.leaderboard-player .user-picture {
+    border: none;
+}
+
+.leaderboard-player .player-score {
+    border: 1px solid #DDD;
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    border-radius: 50%;
+    background: #1c87d7;
+    color: white;
+}
+
+.medal {
+    width: 50px;
+}
+
+.non-medal-rank {
+    width: 50px;
+    font-size: 29px;
+    text-align: center;
+}
+
 /* Responsive */
 @media only screen and (max-width: 900px) {
     .box, .login {

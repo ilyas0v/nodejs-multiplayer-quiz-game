@@ -4,4 +4,5 @@ export class User {
     public currentRoomId: string;
     public picturePosition?: string;
     public score?: number;
+    public rank?: number;
 }

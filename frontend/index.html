@@ -120,6 +120,37 @@
                 <p class="hint"><b>Hint:</b> for playing alone, create a game with <b>"Max players : 1"</b></p>
             </div>
 
+            <div class="leaderboard" v-if="leaderBoard.length > 0">
+                
+                <h2>Game finished</h2>
+                
+                <hr>
+
+                <div class="mt20" style="display: flex; justify-content: space-between; align-items: center; padding: 0px 12px; font-weight: bold; width: 100%; box-sizing: border-box;">
+                    <p>Rank</p>
+                    <p>Player</p>
+                    <p>Score</p>
+                </div>
+
+                <div class="leaderboard-player mt10" v-for="player in leaderBoard">
+                    <div class="player-rank">
+                        <img v-if="player.rank < 4" v-bind:src="'./images/rank-' + player.rank +  '.png'" alt="" class="medal">
+                        <p class="non-medal-rank" v-if="player.rank >= 4">{{ player.rank }}</p>
+                    </div>
+                    <div class="player-name">
+                        <div class="user-picture" v-bind:style="{ backgroundPosition: player.picturePosition }"></div>
+                        <span style="margin-left: 10px;">{{ player.name }}</span>
+                    </div>
+                    <div class="player-score">{{ player.score }}</div>
+                </div> 
+
+                <div class="mt20">
+                    <div class="mt20">
+                        <a href="" class="btn btn-primary">Home ></a>
+                    </div>
+                </div>
+            </div>
+
             <div class="player-statistics">
                 <div class="player" v-for="player in joinedRoomData.players">
                     <div class="user-picture" v-bind:style="{ backgroundPosition: player.picturePosition }">
