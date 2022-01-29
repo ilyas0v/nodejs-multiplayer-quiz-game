@@ -452,6 +452,15 @@ hr {
     text-align: center;
 }
 
+
+.non-medal-rank.no-rank {
+    font-size: 12px;
+}
+
+.leaderboard-player.me {
+    background-color: #cfeef3;
+}
+
 /* Responsive */
 @media only screen and (max-width: 900px) {
     .box, .login {

@@ -132,9 +132,10 @@
                     <p>Score</p>
                 </div>
 
-                <div class="leaderboard-player mt10" v-for="player in leaderBoard">
+                <div class="leaderboard-player mt10" v-for="player in leaderBoard" v-bind:class="{ me : player.id == user.id }">
                     <div class="player-rank">
-                        <img v-if="player.rank < 4" v-bind:src="'./images/rank-' + player.rank +  '.png'" alt="" class="medal">
+                        <p v-if="player.rank == -1" class="non-medal-rank no-rank">No rank</p>
+                        <img v-if="player.rank < 4 && player.rank > 0" v-bind:src="'./images/rank-' + player.rank +  '.png'" alt="" class="medal">
                         <p class="non-medal-rank" v-if="player.rank >= 4">{{ player.rank }}</p>
                     </div>
                     <div class="player-name">

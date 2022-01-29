@@ -73,7 +73,6 @@ export class GameService {
             }
         });
 
-        // let rankedPlayers: any[] = [];
         let lastRank = 0;
 
         players.sort((a: User, b: User) => {
@@ -82,12 +81,15 @@ export class GameService {
 
         for(let i = 0; i < players.length; i++) {
             if (i == 0 || players[i].score != players[i - 1].score) {
-                // rankedPlayers.push([]);
                 lastRank++;
             }
 
-            // rankedPlayers[lastRank - 1].push(players[i]);
-            players[i].rank = lastRank;
+            if(players[i].score == 0) {
+                players[i].rank = -1;
+            } else {
+                players[i].rank = lastRank;
+            }
+
         }
 
         players.map((player: User) => {
