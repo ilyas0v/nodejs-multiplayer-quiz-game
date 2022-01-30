@@ -40,6 +40,8 @@ class UserController {
                 }
             }
         }
+
+        this.io.emit('refreshRooms', JSON.stringify(this.roomRepository.prepareAllRoomsData()));
     }
 
     /**

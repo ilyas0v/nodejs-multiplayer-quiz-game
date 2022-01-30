@@ -50,7 +50,7 @@ class RoomController {
             let players: User[] = this.roomRepository.getPlayersByRoomId(roomId);
             this.io.to(userId).emit('joinedRoom', JSON.stringify({ id: roomId, ...room, players: players, currentUserId: userId }));
             
-            let shouldStart = this.roomRepository.checkUserCountForStart(roomId);
+            let shouldStart = this.roomRepository.checkIfRoomIsFull(roomId);
 
             if(shouldStart) {
                 this.questionRepository.prepareQuestions(room);
@@ -74,7 +74,7 @@ class RoomController {
 
         const room = this.roomRepository.getRoomById(selectedRoomId);
 
-        if (!selectedRoomId || !room || !joinData.name) {
+        if (!selectedRoomId || !room || !joinData.name || this.roomRepository.checkIfRoomIsFull(selectedRoomId)) {
             return false;
         }
 
@@ -93,7 +93,7 @@ class RoomController {
                 this.questionRepository.prepareQuestions(room);
             }
 
-            let shouldStart = this.roomRepository.checkUserCountForStart(selectedRoomId);
+            let shouldStart = this.roomRepository.checkIfRoomIsFull(selectedRoomId);
             let alreadyStarted = room.gameAlreadyStarted;
 
             if (shouldStart && !alreadyStarted) {

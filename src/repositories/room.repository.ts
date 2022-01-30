@@ -88,7 +88,7 @@ class RoomRepository {
      * @param roomId
      * @returns boolean
      */
-    public checkUserCountForStart = (roomId: string) : boolean => {
+    public checkIfRoomIsFull = (roomId: string) : boolean => {
         let room = this.getRoomById(roomId);
 
         if(!room) {
@@ -115,8 +115,8 @@ class RoomRepository {
         Object.keys(rooms).map((roomId: string) => {
             result.push({
                 id: roomId,
-                currentPlayers: this.getPlayersByRoomId(roomId).length,
-                ...this.getRoomById(roomId)
+                ...this.getRoomById(roomId),
+                currentPlayers: this.getPlayersByRoomId(roomId).length
             })
         });
 
